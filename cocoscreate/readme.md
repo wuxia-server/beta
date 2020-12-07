@@ -1,0 +1,1 @@
+paho-mqtt.js 的 ClientImpl.prototype._doConnect有对证书资源加载的处理，cocoscreatr安卓环境下wss需要证书
