@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/liangdas/mqant/conf"
 	"github.com/liangdas/mqant/gate"
+	"github.com/liangdas/mqant/httpgateway/proto"
 	"github.com/liangdas/mqant/log"
 	"github.com/liangdas/mqant/module"
 	"github.com/liangdas/mqant/module/base"
@@ -35,6 +36,7 @@ func (acc *Account) Version() string {
 func (acc *Account) OnInit(app module.App, settings *conf.ModuleSettings) {
 	acc.BaseModule.OnInit(acc, app, settings)
 	acc.GetServer().RegisterGO(pb.C2SLoginDEBUG, acc.LoginWithUserId)
+	acc.GetServer().RegisterGO("/account/userinfo", acc.userinfo)
 }
 
 func (acc *Account) Run(closeSig chan bool) {
@@ -62,5 +64,17 @@ func (acc *Account) LoginWithUserId(session gate.Session, req *pb.C2S_Login_DEBU
 		Lang:         *proto.String(""),
 		AvatarSource: *proto.Uint32(2),
 		SystemAvatar: *proto.String(""),
+	}, nil
+}
+
+/**
+支付回调
+*/
+func (acc *Account) userinfo(request *go_api.Request) (*go_api.Response, error) {
+	userId := request.Get["userId"].GetValues()[0]
+	return &go_api.Response{
+		StatusCode: int32(200),
+		Body:       userId,
+		Header:     make(map[string]*go_api.Pair),
 	}, nil
 }

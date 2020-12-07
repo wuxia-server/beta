@@ -37,7 +37,7 @@ func (self *httpgate) OnInit(app module.App, settings *conf.ModuleSettings) {
 }
 
 func (self *httpgate) startHttpServer() *http.Server {
-	log.Info("httpgate: startHttpServer HTTP server :8090")
+	log.Info("httpgate: startHttpServer HTTP server :%v",self.Port)
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", self.Port),
 		Handler: httpgateway.NewHandler(self.App),
@@ -54,7 +54,7 @@ func (self *httpgate) startHttpServer() *http.Server {
 }
 
 func (self *httpgate) Run(closeSig chan bool) {
-	log.Info("httpgate: starting HTTP server :8090")
+	log.Info("httpgate: starting HTTP server :%v",self.Port)
 	srv := self.startHttpServer()
 	<-closeSig
 	log.Info("httpgate: stopping HTTP server")
